@@ -15,8 +15,8 @@
 <body class="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-100 via-sky-100 to-blue-50 p-6">
 
   <div class="bg-white shadow-2xl rounded-2xl w-full max-w-2xl p-8 penguin-fade-in">
-    <h2 class="text-2xl font-bold text-gray-800 text-center mb-2">Pemesanan Meja {{ $nomor_tempat }}</h2>
-    <p class="text-center text-gray-500 mb-6">Silakan isi pesanan Anda di bawah ini 👇</p>
+    <h2 class="text-2xl font-bold text-gray-800 text-center mb-2">Mie Gacoan</h2>
+    <p class="text-center text-gray-500 mb-6">Silakan isi pesanan Anda di bawah ini</p>
 
     @if(session('success'))
       <div class="bg-green-100 text-green-800 px-4 py-2 rounded-lg mb-4 text-center">
@@ -31,7 +31,17 @@
       <div class="mb-6">
         <label class="block text-gray-700 font-semibold mb-2">Nama Pelanggan</label>
         <input type="text" name="nama_pelanggan" required
-          class="w-full rounded-xl border-gray-300 focus:ring-2 focus:ring-indigo-400 penguin-input px-4 py-2">
+          class="w-full rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-400 penguin-input px-4 py-2">
+      </div>
+
+      <div class="flex justify-between items-center mb-4">
+        <label class="font-semibold">Filter Menu:</label>
+        <select id="filterKategori" class="select select-bordered w-1/2">
+            <option value="all">Semua</option>
+                @foreach ($kategori as $k)
+                    <option value="{{ strtolower($k) }}">{{ ucfirst($k) }}</option>
+                @endforeach
+        </select>
       </div>
 
       <!-- Daftar menu -->
@@ -39,22 +49,23 @@
         <h3 class="text-lg font-semibold text-gray-700 mb-2">Pilih Menu</h3>
 
         @foreach($menus as $menu)
-          <div class="flex items-center justify-between bg-gray-50 border border-gray-200 rounded-xl p-3 hover:bg-gray-100 transition penguin-card">
+          <div class="flex items-center justify-between bg-gray-50 border border-gray-200 rounded-xl p-3 hover:bg-gray-100 transition penguin-card menu-item" data-category="{{ strtolower($menu->kategori ?? 'lainnya') }}">
             <div>
               <p class="font-semibold text-gray-800">{{ $menu->nama_menu }}</p>
               <p class="text-sm text-gray-500">Rp{{ number_format($menu->harga, 0, ',', '.') }}</p>
             </div>
-            <div class="flex items-center gap-2" data-harga="{{ $menu->harga }}">
-              <button type="button" class="minus bg-red-100 hover:bg-red-200 text-red-600 rounded-full w-8 h-8 flex items-center justify-center text-lg font-bold">−</button>
-              <input type="number" name="menu[{{ $menu->id }}]" value="0" min="0"
-                     class="w-12 text-center border rounded-lg py-1 bg-white penguin-input" readonly>
-              <button type="button" class="plus bg-green-100 hover:bg-green-200 text-green-600 rounded-full w-8 h-8 flex items-center justify-center text-lg font-bold">+</button>
+              <div class="flex items-center gap-2" data-harga="{{ $menu->harga }}">
+                <button type="button" class="tambah bg-indigo-100 hover:bg-indigo-200 text-indigo-600 rounded-full px-4 py-2 flex items-center justify-center font-bold">Tambah</button>
+                <input type="number" name="menu[{{ $menu->id }}]" value="0" min="0"
+                       class="w-12 text-center border rounded-lg py-1 bg-white penguin-input" readonly style="display:none;">
+                <button type="button" class="minus bg-red-100 hover:bg-red-200 text-red-600 rounded-full w-8 h-8 flex items-center justify-center text-lg font-bold" style="display:none;">−</button>
+                <button type="button" class="plus bg-green-100 hover:bg-green-200 text-green-600 rounded-full w-8 h-8 flex items-center justify-center text-lg font-bold" style="display:none;">+</button>
             </div>
           </div>
         @endforeach
       </div>
 
-      <!-- Total dan tombol -->
+      <!-- Tombol -->
       <div class="flex justify-between items-center mt-8 border-t pt-4">
         <span class="text-lg font-semibold text-gray-800">
           Total: Rp<span id="total-harga">0</span>
@@ -69,6 +80,22 @@
 
   <!-- Script Hitung Total -->
   <script>
+    // Filter kategori menu
+    const filterKategori = document.getElementById('filterKategori');
+    const menuItems = document.querySelectorAll('.menu-item');
+
+    filterKategori.addEventListener('change', function() {
+      const kategori = this.value;
+      menuItems.forEach(item => {
+        if (kategori === 'all' || item.dataset.category === kategori) {
+          item.style.display = '';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    });
+
+    // Hitung total harga
     const items = document.querySelectorAll('[data-harga]');
     const totalHargaEl = document.getElementById('total-harga');
 
@@ -82,4 +109,40 @@
       totalHargaEl.textContent = total.toLocaleString('id-ID');
     }
 
-    items
+    items.forEach(item => {
+      const tambahBtn = item.querySelector('.tambah');
+      const minusBtn = item.querySelector('.minus');
+      const plusBtn = item.querySelector('.plus');
+      const input = item.querySelector('input');
+
+      tambahBtn.addEventListener('click', () => {
+        input.value = 1;
+        input.style.display = '';
+        minusBtn.style.display = '';
+        plusBtn.style.display = '';
+        tambahBtn.style.display = 'none';
+        hitungTotal();
+      });
+
+      plusBtn.addEventListener('click', () => {
+        input.value = parseInt(input.value) + 1;
+        hitungTotal();
+      });
+
+      minusBtn.addEventListener('click', () => {
+        if (parseInt(input.value) > 1) {
+          input.value = parseInt(input.value) - 1;
+          hitungTotal();
+        } else if (parseInt(input.value) === 1) {
+          input.value = 0;
+          input.style.display = 'none';
+          minusBtn.style.display = 'none';
+          plusBtn.style.display = 'none';
+          tambahBtn.style.display = '';
+          hitungTotal();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
