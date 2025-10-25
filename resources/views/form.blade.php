@@ -43,27 +43,69 @@
                 @endforeach
         </select>
       </div>
+      
+       <!-- Daftar menu -->
+        <div>
+        <h3 class="text-lg font-semibold text-gray-700 mb-4">Pilih Menu</h3>
 
-      <!-- Daftar menu -->
-      <div class="space-y-4">
-        <h3 class="text-lg font-semibold text-gray-700 mb-2">Pilih Menu</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            @foreach($menus as $menu)
+            <article
+                class="menu-item group flex flex-col rounded-lg overflow-hidden border border-neutral-300 bg-neutral-50 text-neutral-700 transition hover:shadow-lg hover:-translate-y-1 duration-300"
+                data-category="{{ strtolower($menu->kategori ?? 'lainnya') }}"
+            >
+                <!-- Gambar -->
+                <div class="h-44 md:h-56 overflow-hidden">
+                <img src="{{ asset('storage/' . $menu->path_gambar) }}"
+                    alt="{{ $menu->nama_menu }}"
+                    class="object-cover w-full h-full transition duration-700 ease-out group-hover:scale-105">
+                </div>
 
-        @foreach($menus as $menu)
-          <div class="flex items-center justify-between bg-gray-50 border border-gray-200 rounded-xl p-3 hover:bg-gray-100 transition penguin-card menu-item" data-category="{{ strtolower($menu->kategori ?? 'lainnya') }}">
-            <div>
-              <p class="font-semibold text-gray-800">{{ $menu->nama_menu }}</p>
-              <p class="text-sm text-gray-500">Rp{{ number_format($menu->harga, 0, ',', '.') }}</p>
-            </div>
-              <div class="flex items-center gap-2" data-harga="{{ $menu->harga }}">
-                <button type="button" class="tambah bg-indigo-100 hover:bg-indigo-200 text-indigo-600 rounded-full px-4 py-2 flex items-center justify-center font-bold">Tambah</button>
-                <input type="number" name="menu[{{ $menu->id }}]" value="0" min="0"
-                       class="w-12 text-center border rounded-lg py-1 bg-white penguin-input" readonly style="display:none;">
-                <button type="button" class="minus bg-red-100 hover:bg-red-200 text-red-600 rounded-full w-8 h-8 flex items-center justify-center text-lg font-bold" style="display:none;">−</button>
-                <button type="button" class="plus bg-green-100 hover:bg-green-200 text-green-600 rounded-full w-8 h-8 flex items-center justify-center text-lg font-bold" style="display:none;">+</button>
-            </div>
-          </div>
-        @endforeach
-      </div>
+                <!-- Konten -->
+                <div class="flex flex-col justify-between flex-1 p-5 gap-4">
+                <div>
+                    <div class="flex justify-between items-start">
+                    <h3 class="text-lg font-bold text-neutral-900">
+                        {{ $menu->nama_menu }}
+                    </h3>
+                    <span class="text-indigo-600 font-semibold">
+                        Rp{{ number_format($menu->harga, 0, ',', '.') }}
+                    </span>
+                    </div>
+
+                    <p class="mt-2 text-sm text-neutral-600">
+                    {{ $menu->deskripsi ?? 'Menu spesial dengan rasa terbaik kami.' }}
+                    </p>
+                </div>
+
+                <!-- Tombol Tambah & Jumlah -->
+                <div class="flex items-center justify-between" data-harga="{{ $menu->harga }}">
+                    <button type="button"
+                            class="tambah flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md text-sm font-medium transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4">
+                        <path fill-rule="evenodd" d="M8 1.5a.75.75 0 0 1 .75.75v5h5a.75.75 0 0 1 0 1.5h-5v5a.75.75 0 0 1-1.5 0v-5h-5a.75.75 0 0 1 0-1.5h5v-5A.75.75 0 0 1 8 1.5Z" clip-rule="evenodd" />
+                    </svg>
+                    Tambah
+                    </button>
+
+                    <div class="flex items-center gap-2">
+                    <button type="button"
+                            class="minus bg-red-100 hover:bg-red-200 text-red-600 rounded-full w-8 h-8 flex justify-center text-lg font-bold"
+                            style="display:none;">-</button>
+                    <input type="number" name="menu[{{ $menu->id }}]" value="0" min="0"
+                            class="w-12 text-center border rounded-md py-1 bg-white penguin-input"
+                            readonly style="display:none;">
+                    <button type="button"
+                            class="plus bg-green-100 hover:bg-green-200 text-green-600 rounded-full w-8 h-8 flex justify-center text-lg font-bold"
+                            style="display:none;">+</button>
+                    </div>
+                </div>
+                </div>
+            </article>
+            @endforeach
+        </div>
+        </div>
+
 
       <!-- Tombol -->
       <div class="flex justify-between items-center mt-8 border-t pt-4">

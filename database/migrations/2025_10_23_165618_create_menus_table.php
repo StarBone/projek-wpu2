@@ -16,6 +16,7 @@ return new class extends Migration
             $table->enum('kategori', ['makanan', 'minuman', 'dessert']);
             $table->string('nama_menu', 100);
             $table->text('deskripsi')->nullable();
+            $table->string('path_gambar');
             $table->integer('harga');
             $table->timestamps();
         });
