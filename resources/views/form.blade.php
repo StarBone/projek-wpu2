@@ -110,7 +110,7 @@
       <!-- Tombol -->
       <div class="flex justify-between items-center mt-8 border-t pt-4">
         <span class="text-lg font-semibold text-gray-800">
-          Total: Rp<span id="total-harga">0</span>
+          Total: Rp<span id="total-harga">-</span>
         </span>
         <button type="submit"
           class="penguin-btn penguin-btn-primary bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-full transition-all">
