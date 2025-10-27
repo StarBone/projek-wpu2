@@ -35,7 +35,7 @@
       </div>
 
       <div class="flex justify-between items-center mb-4">
-        <label class="font-semibold">Filter Menu:</label>
+        <label class="font-semibold">Kategori:</label>
         <select id="filterKategori" class="select select-bordered w-1/2">
             <option value="all">Semua</option>
                 @foreach ($kategori as $k)
@@ -43,14 +43,14 @@
                 @endforeach
         </select>
       </div>
-      
+
        <!-- Daftar menu -->
         <div>
         <h3 class="text-lg font-semibold text-gray-700 mb-4">Pilih Menu</h3>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
             @foreach($menus as $menu)
-            <article
+            <div
                 class="menu-item group flex flex-col rounded-lg overflow-hidden border border-neutral-300 bg-neutral-50 text-neutral-700 transition hover:shadow-lg hover:-translate-y-1 duration-300"
                 data-category="{{ strtolower($menu->kategori ?? 'lainnya') }}"
             >
@@ -101,7 +101,7 @@
                     </div>
                 </div>
                 </div>
-            </article>
+            </div>
             @endforeach
         </div>
         </div>

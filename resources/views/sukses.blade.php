@@ -63,7 +63,7 @@
 
     <!-- Barcode -->
     <div class="mt-5 flex justify-center">{!! $qrcode !!}</div>
-    {{-- <p class="text-sm text-gray-500 mb-6">Tunjukkan barcode ini ke kasir untuk konfirmasi pesanan.</p> --}}
+    <p class="mt-5 text-sm text-gray-500 mb-6">Tunjukkan barcode ini ke kasir untuk konfirmasi pesanan.</p>
 
     <!-- Tombol kembali -->
     <div class="mt-8">
