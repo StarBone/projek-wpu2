@@ -28,9 +28,9 @@
 
     <!-- Detail Pemesanan -->
     <div class="text-left bg-gray-50 border border-gray-200 rounded-xl p-5 mb-6">
+      <p><span class="font-semibold text-gray-800">{{ $pesanan->created_at }}</span></p>
       <p><span class="font-semibold text-gray-800">Nomor Order:</span> {{ $pesanan->nomor_order }}</p>
       <p><span class="font-semibold text-gray-800">Nama Pelanggan:</span> {{ $pesanan->pelanggan->nama_pelanggan }}</p>
-      {{-- <p><span class="font-semibold text-gray-800">Total Harga:</span> Rp{{ number_format($pesanan->total_harga, 0, ',', '.') }}</p> --}}
       <p><span class="font-semibold text-gray-800">Nomor Meja:</span> {{ $pesanan->tempatDuduk->nomor_tempat }}</p>
     </div>
 
@@ -62,12 +62,12 @@
     </div>
 
     <!-- Barcode -->
-    {{-- <div class="flex justify-center">{!! $barcode !!}</div>
-    <p class="text-sm text-gray-500 mb-6">Tunjukkan barcode ini ke kasir untuk konfirmasi pesanan.</p> --}}
+    <div class="mt-5 flex justify-center">{!! $qrcode !!}</div>
+    {{-- <p class="text-sm text-gray-500 mb-6">Tunjukkan barcode ini ke kasir untuk konfirmasi pesanan.</p> --}}
 
     <!-- Tombol kembali -->
     <div class="mt-8">
-      <a href="{{ url('/pesan/' . ($pesanan->tempatDuduk->nomor_tempat ?? 1)) }}"
+      <a href="{{ url('/pesan/' . $pesanan->tempatDuduk->nomor_tempat) }}"
          class="penguin-btn penguin-btn-primary px-6 py-2 rounded-full bg-indigo-600 text-white hover:bg-indigo-700 transition-all duration-200">
          Kembali ke Menu
       </a>

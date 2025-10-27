@@ -30,7 +30,6 @@ class PesananController extends Controller
         $pesanan = Pesanan::create([
             'nomor_order' => 'ORD-' . strtoupper(Str::random(6)),
             'id_pelanggan' => $pelanggan->id,
-            'waktu_pesanan' => now(),
             'total_harga' => 0,
         ]);
 
@@ -64,8 +63,20 @@ class PesananController extends Controller
 
     public function success($nomor_order)
     {
-        $pesanan = Pesanan::with(['pelanggan', 'tempatDuduk', 'detailPemesanan.menu'])->where('nomor_order', $nomor_order)->firstOrFail();
-        return view('sukses', compact('pesanan'));
+        $pesanan = Pesanan::with(['pelanggan', 'tempatDuduk', 'detailPemesanan.menu'])
+            ->where('nomor_order', $nomor_order)
+            ->firstOrFail();
+
+        $qrdata = [
+            'waktu_pemesanan' => $pesanan->created_at,
+            'nomor_order' => $pesanan->nomor_order,
+            'nama_pelanggan' => optional($pesanan->pelanggan)->nama_pelanggan,
+            'total_harga' => $pesanan->total_harga,
+        ];
+
+        $qrcode = QrCode::size(200)->generate(json_encode($qrdata));
+
+        return view('sukses', compact('pesanan', 'qrcode'));
     }
 
 }

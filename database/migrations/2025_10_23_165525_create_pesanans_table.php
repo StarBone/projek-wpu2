@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('nomor_order')->unique();
             $table->foreignId('id_pelanggan')->constrained('pelanggans')->onDelete('cascade');
-            $table->dateTime('waktu_pesanan');
             $table->integer('total_harga')->default(0);
             $table->timestamps();
         });
